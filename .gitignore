@@ -4,3 +4,6 @@
 # Ignoring build artifacts folders
 build
 obj
+
+# Ignoring Doxygen output
+docs/Doxygen_output
