@@ -1,0 +1,6 @@
+# Ignoring .vscode folder
+.vscode
+
+# Ignoring build artifacts folders
+build
+obj
