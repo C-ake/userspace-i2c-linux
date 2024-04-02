@@ -94,7 +94,7 @@ int16_t i2cInit(uint16_t bus, i2cConfiguration_t *i2cConf);
  * \returns US_I2C_SUCCESS if data is successfully read, US_I2C_ERROR otherwise.
 */
 int16_t i2cRead(const i2cConfiguration_t *i2cConf, uint8_t slaveAddr,
-                uint8_t dataSize, uint8_t addr, uint8_t dataBufferSize, 
+                uint8_t dataSize, uint8_t regAddr, uint8_t dataBufferSize, 
                 uint8_t *dataBuffer);
 
 /**
@@ -108,7 +108,7 @@ int16_t i2cRead(const i2cConfiguration_t *i2cConf, uint8_t slaveAddr,
  * \returns US_I2C_SUCCESS if data is successfully written, US_I2C_ERROR otherwise.
 */
 int16_t i2cWrite(const i2cConfiguration_t *i2cConf, uint8_t slaveAddr,
-                uint8_t dataSize, uint8_t addr, uint8_t dataBufferSize, 
+                uint8_t dataSize, uint8_t regAddr, uint8_t dataBufferSize, 
                 const uint8_t *dataBuffer);
 
 /**
