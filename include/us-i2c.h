@@ -72,6 +72,8 @@ typedef struct i2cConfiguration_s
 } i2cConfiguration_t;
 
 
+/* Functions Declarations */
+
 /**
  * \brief This function initializes the I2C bus by opening the device.
  * \param [in] bus -- The I2C bus number.
