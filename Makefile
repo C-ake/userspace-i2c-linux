@@ -39,7 +39,7 @@ LIB_SRC = $(wildcard $(LIB_SRC_DIR)/*.c)
 LIB_OBJ = $(patsubst $(LIB_SRC_DIR)/%.c, $(LIB_OBJ_DIR)/%.o, $(LIB_SRC))
 
 #define compilation targets
-all: static shared test
+all: static shared
 
 # Compile the library as a static library
 static:
@@ -54,11 +54,6 @@ shared:
 	@mkdir -p $(LIB_SHARED_DIR)
 	$(CC) $(CFLAGS) -fPIC -c $(LIB_SRC) -I$(LIB_INC_DIR) -o $(LIB_OBJ)
 	$(CC) -shared -o $(LIB_SHARED_DIR)/$(LIB_NAME).so $(LIB_OBJ)
-
-# Compile the test program
-test:
-	@mkdir -p $(LIB_TEST_DIR)
-	$(CC) $(CFLAGS) $(TEST_SRC_DIR)/main.c -I$(LIB_INC_DIR) -L$(LIB_STATIC_DIR) -li2c_userspace -o $(LIB_TEST_DIR)/PCA9865_I2CReadWrite
 
 clean:
 	rm -rf $(LIB_OBJ_DIR) $(LIB_STATIC_DIR) $(LIB_SHARED_DIR) $(LIB_TEST_DIR)
