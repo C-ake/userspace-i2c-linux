@@ -141,7 +141,8 @@ int16_t i2cWrite(const i2cConfiguration_t *i2cConf, uint8_t slaveAddr,
                 uint8_t dataSize, uint8_t addr, uint8_t dataBufferSize, 
                 const uint8_t *dataBuffer)
 {
-    uint8_t *txBuffer = NULL;
+    uint16_t txBufferSize = dataSize + I2C_REGISTER_ADDR_SIZE;
+    uint8_t *txBuffer = (uint8_t *) calloc(txBufferSize, sizeof(uint8_t));
 
     /* Validating input */
     if (i2cConf == NULL || dataBuffer == NULL)
@@ -159,37 +160,24 @@ int16_t i2cWrite(const i2cConfiguration_t *i2cConf, uint8_t slaveAddr,
         return US_I2C_ERROR;
     }
 
-    /* Allocating space for data transfer buffer */
-    txBuffer = (uint8_t*) malloc(sizeof(uint8_t) * (dataSize + sizeof(I2C_REGISTER_ADDR_SIZE)));
-
-    if (txBuffer == NULL)
-    {
-        return US_I2C_ERROR;
-    }
-
-    /* Copying the register address to the buffer */
-    (void)memcpy(txBuffer, &addr, I2C_REGISTER_ADDR_SIZE);
-
-    /* Copying the data to the buffer */
-    (void)memcpy(txBuffer + sizeof(I2C_REGISTER_ADDR_SIZE), dataBuffer, dataSize);
+    /* Preparing txBuffer */
+    txBuffer[0] = addr;
+    (void)memcpy(&txBuffer[I2C_REGISTER_ADDR_SIZE], dataBuffer, dataSize);
 
     /* Setting the slave address */
     if (ioctl(i2cConf->busFD, I2C_SLAVE, slaveAddr) < 0)
     {
-        free(txBuffer);
         (void)perror("Error setting I2C slave address\n");
         return US_I2C_ERROR;
     }
 
     /* Writing data to the I2C bus */
-    if (write(i2cConf->busFD, txBuffer, dataSize + sizeof(I2C_REGISTER_ADDR_SIZE)) != (ssize_t) (dataSize + sizeof(I2C_REGISTER_ADDR_SIZE)))
+    if (write(i2cConf->busFD, txBuffer, txBufferSize) != txBufferSize)
     {
-        free(txBuffer);
         (void)perror("Error writing data to I2C bus\n");
         return US_I2C_ERROR;
     }
 
-    free(txBuffer);
     return US_I2C_SUCCESS;
 }
 
